@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>视频播放器</title>
+
+<link href="https://vjs.zencdn.net/8.23.7/video-js.min.css" rel="stylesheet">
+
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: #000;
+    overflow: hidden;
+  }
+  body {
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #my-player.video-js {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+
+  #my-player .vjs-tech {
+    object-fit: contain;
+  }
+
+  /* ===== 居中圆形毛玻璃播放按钮（自动播放被拦截时出现）===== */
+  .video-js .vjs-big-play-button {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    width: 86px;
+    height: 86px;
+    line-height: 86px;
+    font-size: 1em;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(12, 12, 14, 0.5);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+  .video-js .vjs-big-play-button:hover,
+  .video-js .vjs-big-play-button:focus {
+    background: rgba(34, 211, 238, 0.2);
+    border-color: #22d3ee;
+    outline: none;
+  }
+  .video-js .vjs-big-play-button .vjs-icon-placeholder:before {
+    font-size: 30px;
+    line-height: inherit;
+  }
+
+  /* ===== 进度条 / 音量条配色 ===== */
+  .video-js .vjs-slider { background-color: rgba(255, 255, 255, 0.18); }
+  .video-js .vjs-play-progress,
+  .video-js .vjs-volume-level { background-color: #22d3ee; }
+  .video-js .vjs-play-progress:before { color: #22d3ee; }
+  .video-js .vjs-load-progress { background: rgba(255, 255, 255, 0.08); }
+  .video-js .vjs-load-progress div { background: rgba(255, 255, 255, 0.16); }
+
+  /* ===== 控制栏 ===== */
+  .video-js .vjs-control-bar {
+    background: rgba(8, 8, 10, 0.5);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    height: 3.6em;
+  }
+
+  /* ===== 倍速菜单 ===== */
+  .video-js .vjs-menu-button-popup .vjs-menu .vjs-menu-content {
+    background: rgba(20, 20, 24, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+  }
+
+  @media (max-width: 640px) {
+    .video-js .vjs-big-play-button { width: 68px; height: 68px; line-height: 68px; }
+    .video-js .vjs-big-play-button .vjs-icon-placeholder:before { font-size: 24px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .video-js .vjs-big-play-button { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 不再设置 muted，尝试有声自动播放 -->
+<video
+  id="my-player"
+  class="video-js vjs-big-play-centered"
+  controls
+  autoplay
+  preload="auto"
+  playsinline
+  webkit-playsinline
+  poster="https://7hello80.github.io/AcFun/img/IMG_20261017_181610.jpg"
+>
+  <source src="https://vdse.bdstatic.com/192d9a98d782d9c74c96f09db9378d93.mp4" type="video/mp4">
+  
+  <p class="vjs-no-js">
+    要观看此视频，请启用 JavaScript，并升级到支持
+    <a href="https://videojs.com/html5-video-support/" target="_blank" rel="noopener">HTML5 视频</a>
+    的浏览器。
+  </p>
+</video>
+
+<script src="https://vjs.zencdn.net/8.23.7/video.min.js"></script>
+<script>
+  const player = videojs('my-player', {
+    autoplay: true,
+    muted: false,          // 明确不静音
+    fluid: false,
+    playsinline: true,
+    playbackRates: [0.5, 0.75, 1, 1.25, 1.5, 2]
+  });
+
+  // 尝试播放；如果被浏览器拦截，Promise 会 reject，大播放按钮会保留等待点击
+  const playPromise = player.play();
+  if (playPromise && typeof playPromise.catch === 'function') {
+    playPromise.catch(() => {
+      // 拦截是正常现象，不需要额外处理；
+      // 用户点击画面中央的大播放按钮即可开始播放
+    });
+  }
+</script>
+
+</body>
+</html>
