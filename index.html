@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>您是否已满18岁</title>
+    <style type="text/css">
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-image: url(https://www.loliapi.com/acg/);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            transition: opacity .35s ease;
+        }
+
+        .overlay.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .text-bg {
+            background-color: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+        }
+
+        .overlay-body {
+            max-width: 512px;
+            text-align: center;
+            font-family: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+
+        p.overlay-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: #000;
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+
+        p.overlay-description {
+            font-size: 16px;
+            font-weight: 400;
+            color: rgba(0, 0, 0, 0.55);
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .overlay-buttons-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 24px -4px -4px;
+        }
+
+        .overlay-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 44px;
+            padding: 0 24px;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1;
+            border-radius: 8px;
+            margin: 4px;
+            cursor: pointer;
+            user-select: none;
+            transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease;
+        }
+
+        .overlay-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .overlay-button:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        #accept-button {
+            background-color: rgb(255, 0, 0);
+            color: #fff;
+            box-shadow: 0 6px 18px rgba(255, 0, 0, 0.32);
+        }
+
+        #accept-button:hover {
+            background-color: rgb(220, 0, 0);
+        }
+
+        #decline-button {
+            color: rgb(0, 0, 0);
+            border: 2px solid rgb(0, 0, 0);
+            background: transparent;
+        }
+
+        #decline-button:hover {
+            background-color: rgba(0, 0, 0, 0.06);
+        }
+
+        @media (max-width: 400px) {
+            .overlay-button {
+                padding: 0 18px;
+                font-size: 15px;
+            }
+
+            p.overlay-title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="overlay" class="overlay">
+        <div class="text-bg">
+            <div class="overlay-body">
+                <p class="overlay-title">您是否已满18岁？</p>
+                <p class="overlay-description">以下内容可能不适合<b>未满18岁</b>的人群观看，我们需要确认您的年龄。</p>
+                <p class="overlay-description">The following content may not be suitable for people <b>under the age of
+                        18</b>, we need to confirm your age.</p>
+                <div class="overlay-buttons-wrapper">
+                    <div id="accept-button" class="overlay-button">已满18岁</div>
+                    <div id="decline-button" class="overlay-button">未满18岁</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        /* ============================================================
+         *  ▼▼▼ 配置区：把下面两个链接改成你想要的地址即可 ▼▼▼
+         * ============================================================ */
+
+        // 已满18岁 → 瑞克摇
+        // 国内推荐 B 站：https://www.bilibili.com/video/BV1GJ411x7h7
+        // 海外/YouTube：https://www.youtube.com/watch?v=dQw4w9WgXcQ
+        const ADULT_URL = "./video.html";
+
+        // 未满18岁 → 宝宝巴士
+        // B 站搜索页（比较稳妥）：https://search.bilibili.com/all?keyword=宝宝巴士
+        // 也可以换成任意宝宝巴士视频页
+        const KIDS_URL = "https://mo.babybus.com/home.html";
+
+        /* ============================================================ */
+
+        const overlay = document.getElementById("overlay");
+        const acceptButton = document.getElementById("accept-button");
+        const declineButton = document.getElementById("decline-button");
+
+        function go(url) {
+            overlay.classList.add("fade-out"); // 先淡出，再跳转
+            setTimeout(function () {
+                window.location.href = url;
+            }, 350);
+        }
+
+        acceptButton.addEventListener("click", function () {
+            go(ADULT_URL);
+        });
+
+        declineButton.addEventListener("click", function () {
+            go(KIDS_URL);
+        });
+    </script>
+</body>
+
+</html>
